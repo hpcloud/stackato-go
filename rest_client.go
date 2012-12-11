@@ -5,7 +5,6 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"fmt"
-	"github.com/srid/log"
 	"io/ioutil"
 	"net/http"
 )
@@ -36,7 +35,6 @@ func (c *RestClient) CreateApp(name string) (int, error) {
 	if err != nil {
 		return -1, err
 	}
-	log.Infof("CREATE: %+v", response)
 	if app_id, ok := response["app_id"].(float64); ok {
 		return int(app_id), nil
 	} else {
