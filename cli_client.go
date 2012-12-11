@@ -25,7 +25,7 @@ func NewCliClient(endpoint string, token string, group string) (*CliClient, erro
 
 // PushAppNoCreate emulates `s push --no-create ...` and sends the
 // output in outputCh channel.
-func (c *CliClient) PushAppNoCreate(name string, dir string, outputCh chan string) error {
+func (c *CliClient) PushAppNoCreate(name string, dir string, autoStart bool, outputCh chan string) error {
 	// TODO: validate 'endpoint' and 'name' for security reasons.
 
 	options := []string{
@@ -34,6 +34,10 @@ func (c *CliClient) PushAppNoCreate(name string, dir string, outputCh chan strin
 		"--target", c.Endpoint,
 		"--token", c.Token,
 		"--path", dir}
+
+	if !autoStart {
+		options = append(options, "--no-start")
+	}
 
 	if c.Group != "" {
 		options = append(options, "--group", c.Group)
