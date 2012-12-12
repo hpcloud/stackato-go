@@ -10,28 +10,26 @@ import (
 )
 
 type CliClient struct {
-	Endpoint string
+	TargetURL string
 	Token    string
 	Group    string
 }
 
-func NewCliClient(endpoint string, token string, group string) (*CliClient, error) {
+func NewCliClient(targetUrl, token, group string) (*CliClient, error) {
 	if token == "" {
 		return nil, fmt.Errorf("token string must not be empty")
 	}
-	c := &CliClient{endpoint, token, group}
+	c := &CliClient{targetUrl, token, group}
 	return c, nil
 }
 
 // PushAppNoCreate emulates `s push --no-create ...` and sends the
 // output in outputCh channel.
 func (c *CliClient) PushAppNoCreate(name string, dir string, autoStart bool, outputCh chan string) error {
-	// TODO: validate 'endpoint' and 'name' for security reasons.
-
 	options := []string{
 		name,
 		"--no-tail", "--no-prompt",
-		"--target", c.Endpoint,
+		"--target", c.TargetURL,
 		"--token", c.Token,
 		"--path", dir}
 

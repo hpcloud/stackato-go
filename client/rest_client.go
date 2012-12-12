@@ -10,14 +10,14 @@ import (
 )
 
 type RestClient struct {
-	URL    string
+	TargetURL    string
 	Token  string
 	Group  string
 	client *http.Client
 }
 
-func NewRestClient(url, token, group string) *RestClient {
-	return &RestClient{url, token, group, getInsecureHttpRestClient()}
+func NewRestClient(targetUrl, token, group string) *RestClient {
+	return &RestClient{targetUrl, token, group, getInsecureHttpRestClient()}
 }
 
 // CreateApp only creates the application. It is an equivalent of `s
@@ -47,7 +47,7 @@ func (c *RestClient) CreateApp(name string) (int, error) {
 
 // A version of http.NewRequest including token and group params; and taking path and params.
 func (c *RestClient) NewRequest(method string, path string, params map[string]interface{}) (*http.Request, error) {
-	url := c.URL + path
+	url := c.TargetURL + path
 
 	body, err := json.Marshal(params)
 	if err != nil {
