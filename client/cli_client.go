@@ -4,15 +4,15 @@ package client
 
 import (
 	"fmt"
-	"github.com/srid/log"
-	"github.com/srid/run"
+	"github.com/ActiveState/log"
+	"github.com/ActiveState/run"
 	"os/exec"
 )
 
 type CliClient struct {
 	TargetURL string
-	Token    string
-	Group    string
+	Token     string
+	Group     string
 }
 
 func NewCliClient(targetUrl, token, group string) (*CliClient, error) {

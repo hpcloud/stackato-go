@@ -3,15 +3,15 @@ package client
 import (
 	"crypto/tls"
 	"fmt"
+	"github.com/ActiveState/httpapi/client"
 	"net/http"
-	"github.com/srid/httpapi/client"
 )
 
 type RestClient struct {
-	TargetURL    string
-	Token  string
-	Group  string
-	client *client.Client
+	TargetURL string
+	Token     string
+	Group     string
+	client    *client.Client
 }
 
 func NewRestClient(targetUrl, token, group string) *RestClient {
@@ -20,6 +20,8 @@ func NewRestClient(targetUrl, token, group string) *RestClient {
 
 // CreateApp only creates the application. It is an equivalent of `s
 // create-app --json`.
+// FIXME: check for an app of the same name before actually creating
+// it. the server allows duplicate app names!
 func (c *RestClient) CreateApp(name string) (int, error) {
 	// POST on /apps seems to required these at minimum.
 	createArgs := map[string]interface{}{
@@ -42,7 +44,7 @@ func (c *RestClient) CreateApp(name string) (int, error) {
 }
 
 func (c *RestClient) MakeRequest(method string, path string, params client.Hash) (client.Hash, error) {
-	req, err := client.NewRequest(method, c.TargetURL + path, params)
+	req, err := client.NewRequest(method, c.TargetURL+path, params)
 	if err != nil {
 		return nil, err
 	}
