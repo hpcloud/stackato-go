@@ -42,7 +42,7 @@ func (c *RestClient) CreateApp(name string) (int, error) {
 }
 
 func (c *RestClient) MakeRequest(method string, path string, params client.Hash) (client.Hash, error) {
-	req, err := client.NewRequest(method, path, params)
+	req, err := client.NewRequest(method, c.TargetURL + path, params)
 	if err != nil {
 		return nil, err
 	}
