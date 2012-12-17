@@ -85,7 +85,7 @@ func (c *RestClient) CreateApp(name string) (int, error) {
 	return resp.App_ID, nil
 }
 
-func (c *RestClient) MakeRequest(method string, path string, params client.Hash, response interface{}) error {
+func (c *RestClient) MakeRequest(method string, path string, params interface{}, response interface{}) error {
 	req, err := client.NewRequest(method, c.TargetURL+path, params)
 	if err != nil {
 		return err
