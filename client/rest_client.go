@@ -22,7 +22,7 @@ type App struct {
 	Name string
 	URIs []string
 	Instances int
-	RunningInstances int
+	RunningInstances *int
 	State string
 	Version string
 	Staging struct {
