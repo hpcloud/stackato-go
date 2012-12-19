@@ -43,7 +43,6 @@ func (c *CliClient) PushAppNoCreate(name string, dir string, autoStart bool, out
 
 	pushOptions := append([]string{"push", "--no-create"}, options...)
 
-	log.Infof("Deploying app %s", name)
 	ret, err := run.Run(exec.Command("stackato", pushOptions...), outputCh)
 	if err != nil {
 		log.Error("cannot read line: ", err)
