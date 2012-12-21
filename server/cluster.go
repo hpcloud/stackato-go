@@ -7,14 +7,15 @@ import (
 )
 
 type clusterConfig struct {
-	Endpoint string `doozer:"endpoint"`
+	Endpoint string `doozer:"/cluster/config/endpoint"`
+	NatsUri  string `doozer:"/proc/cloud_controller/config/mbus"`
 }
 
 var Config *clusterConfig
 
 func Init(conn *doozer.Conn, rev int64) {
 	Config = new(clusterConfig)
-	cfg := doozerconfig.New(conn, rev, Config, "/cluster/config/")
+	cfg := doozerconfig.New(conn, rev, Config, "")
 	err := cfg.Load()
 	if err != nil {
 		log.Fatal(err)
