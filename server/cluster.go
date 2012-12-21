@@ -4,6 +4,7 @@ import (
 	"github.com/ActiveState/doozer"
 	"github.com/ActiveState/doozerconfig"
 	"github.com/ActiveState/log"
+	"strings"
 )
 
 type clusterConfig struct {
@@ -12,6 +13,11 @@ type clusterConfig struct {
 }
 
 var Config *clusterConfig
+
+// IsMicro returns true if the cluster is configured as a micro cloud.
+func (c *clusterConfig) IsMicro() bool {
+	return strings.Contains(c.NatsUri, "/127.0.0.1:")
+}
 
 func Init(conn *doozer.Conn, rev int64) {
 	Config = new(clusterConfig)
