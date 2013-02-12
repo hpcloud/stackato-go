@@ -9,6 +9,7 @@ import (
 
 type clusterConfig struct {
 	Endpoint string `doozer:"/cluster/config/endpoint"`
+	CoreIP   string `doozer:"/cluster/config/mbusip"`
 	NatsUri  string `doozer:"/proc/cloud_controller/config/mbus"`
 }
 
