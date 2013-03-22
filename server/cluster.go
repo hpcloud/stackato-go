@@ -1,7 +1,7 @@
 package server
 
 import (
-	"github.com/ActiveState/doozer"
+	"github.com/ha/doozer"
 	"github.com/ActiveState/doozerconfig"
 	"github.com/ActiveState/log"
 	"strings"

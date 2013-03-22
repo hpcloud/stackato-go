@@ -1,7 +1,7 @@
 package server
 
 import (
-	"github.com/ActiveState/doozer"
+	"github.com/ha/doozer"
 	"io/ioutil"
 	"strings"
 )
