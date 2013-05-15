@@ -3,7 +3,16 @@ package server
 import (
 	"net"
 	"fmt"
+	"github.com/ActiveState/log"
 )
+
+func LocalIPMust() string {
+	ip, err := LocalIP()
+	if err != nil {
+		log.Fatalf("Unable to determine local IP: %v", err)
+	}
+	return ip
+}
 
 // LocalIP returns the ip address of the local node
 func LocalIP() (string, error) {
