@@ -2,6 +2,7 @@ package server
 
 import (
 	"confdis/go/confdis"
+	"fmt"
 	"github.com/ActiveState/log"
 	"io/ioutil"
 	"net/url"
@@ -16,11 +17,17 @@ type Config struct {
 }
 
 func NewConfig(group string, s interface{}) (*Config, error) {
-	addr, err := getStackatoRedisAddr()
+	addr, pass, db, err := getStackatoRedisAddr()
 	if err != nil {
 		return nil, err
 	}
-	c, err := confdis.New(addr, group, s)
+
+	redis, err := NewRedisClient(addr, pass, db)
+	if err != nil {
+		return nil, err
+	}
+
+	c, err := confdis.New(redis, group, s)
 	if err != nil {
 		return nil, err
 	}
@@ -53,14 +60,26 @@ func (g *Config) monitor() {
 	}
 }
 
-func getStackatoRedisAddr() (string, error) {
+// getStackatoRedisAddr returns the redis connection address, password
+// and database of the Stackato redis instance storing configuration.
+func getStackatoRedisAddr() (string, string, int64, error) {
 	uridata, err := ioutil.ReadFile("/s/etc/kato/redis_uri")
 	if err != nil {
-		return "", err
+		return "", "", -1, err
 	}
 	u, err := url.Parse(string(uridata))
 	if err != nil {
-		return "", err
+		return "", "", -1, err
 	}
-	return u.Host, nil
+
+	// extract database number from Path
+	var database int64
+	fmt.Sscanf(u.Path, "/%d", &database)
+
+	pass, haspass := u.User.Password()
+	if !haspass {
+		pass = ""
+	}
+
+	return u.Host, pass, database, nil
 }
