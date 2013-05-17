@@ -19,25 +19,25 @@ func NewRestClient(targetUrl, token, group string) *RestClient {
 }
 
 type App struct {
-	Name string
-	URIs []string
-	Instances int
+	Name             string
+	URIs             []string
+	Instances        int
 	RunningInstances *int
-	State string
-	Version string
-	Staging struct {
+	State            string
+	Version          string
+	Staging          struct {
 		Model string
 		Stack string
 	}
 	Resources struct {
 		Memory int
-		Disk int
-		FDs int
-		Sudo bool
+		Disk   int
+		FDs    int
+		Sudo   bool
 	}
 	Meta struct {
 		Version int
-		Created int  // timestamp
+		Created int // timestamp
 	}
 }
 
@@ -60,7 +60,7 @@ func (c *RestClient) CreateApp(name string) (int, error) {
 			return -1, fmt.Errorf("App by that name (%s) already exists", name)
 		}
 	}
-	
+
 	// The CC requires that a POST on /apps passes, at minimum, these
 	// fields. The values for framework/runtime doesn't matter for our
 	// purposes (they will get overwritten by a subsequent app push).
@@ -72,7 +72,7 @@ func (c *RestClient) CreateApp(name string) (int, error) {
 		},
 	}
 
-	var resp struct { App_ID int }
+	var resp struct{ App_ID int }
 	err = c.MakeRequest("POST", "/apps", createArgs, &resp)
 	if err != nil {
 		return -1, err

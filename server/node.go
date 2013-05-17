@@ -1,9 +1,9 @@
-package server 
+package server
 
 import (
-	"net"
 	"fmt"
 	"github.com/ActiveState/log"
+	"net"
 )
 
 func LocalIPMust() string {
@@ -39,7 +39,7 @@ func localIP() (net.IP, error) {
 				continue
 			}
 			v4 := ipnet.IP.To4()
-			if v4 == nil || v4[0] == 127 { // loopback address 
+			if v4 == nil || v4[0] == 127 { // loopback address
 				continue
 			}
 			return v4, nil
