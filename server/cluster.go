@@ -1,37 +1,35 @@
 package server
 
 import (
-	"github.com/ha/doozer"
-	"github.com/ActiveState/doozerconfig"
 	"github.com/ActiveState/log"
 	"strings"
 )
 
-type clusterConfig struct {
-	Endpoint string `doozer:"/cluster/config/endpoint"`
-	CoreIP   string `doozer:"/cluster/config/mbusip"`
-	NatsUri  string `doozer:"/proc/cloud_controller/config/mbus"`
+type ClusterConfig struct {
+	MbusIp   string `json:"mbusip"`
+	Endpoint string `json:"endpoint"`
+	// TODO: somehow use NatsUri from cc config
+	NatsUri string
 }
 
-var Config *clusterConfig
+var clusterConfig *GroupConfig
 
-// IsMicro returns true if the cluster is configured as a micro cloud.
-func (c *clusterConfig) IsMicro() bool {
-	return strings.Contains(c.NatsUri, "/127.0.0.1:")
+func GetClusterConfig() *ClusterConfig {
+	if clusterConfig == nil {
+		log.Fatal("server.Init() not called")
+	}
+	return clusterConfig.Config.(*ClusterConfig)
 }
 
-func Init(conn *doozer.Conn, rev int64) {
-	Config = new(clusterConfig)
-	cfg := doozerconfig.New(conn, rev, Config, "")
-	err := cfg.Load()
+func Init() {
+	var err error
+	clusterConfig, err = NewGroupConfig("cluster", ClusterConfig{})
 	if err != nil {
 		log.Fatal(err)
 	}
+}
 
-	go cfg.Monitor("/cluster/config/*", func(change *doozerconfig.Change, err error) {
-		if err != nil {
-			log.Errorf("Unable to process cluster config change in doozer: %s", err)
-			return
-		}
-	})
+// IsMicro returns true if the cluster is configured as a micro cloud.
+func (c *ClusterConfig) IsMicro() bool {
+	return strings.Contains(c.NatsUri, "/127.0.0.1:")
 }
