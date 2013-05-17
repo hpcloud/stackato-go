@@ -1,8 +1,8 @@
 package server
 
 import (
-	"github.com/ActiveState/log"
 	"fmt"
+	"github.com/ActiveState/log"
 	"sync"
 )
 
@@ -28,6 +28,7 @@ func GetClusterConfig() *ClusterConfig {
 }
 
 var once sync.Once
+
 func createClusterConfig() {
 	var err error
 	clusterConfig, err = NewConfig("cluster", ClusterConfig{})

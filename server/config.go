@@ -3,6 +3,8 @@ package server
 import (
 	"confdis/go/confdis"
 	"github.com/ActiveState/log"
+	"io/ioutil"
+	"net/url"
 )
 
 // Config refers to Stackato configuration under a specific
@@ -14,8 +16,11 @@ type Config struct {
 }
 
 func NewConfig(group string, s interface{}) (*Config, error) {
-	// TODO: use cluster config to determine redis location.
-	c, err := confdis.New("localhost:5454", group, s)
+	addr, err := getStackatoRedisAddr()
+	if err != nil {
+		return nil, err
+	}
+	c, err := confdis.New(addr, group, s)
 	if err != nil {
 		return nil, err
 	}
@@ -46,4 +51,16 @@ func (g *Config) monitor() {
 			g.changes <- err
 		}
 	}
+}
+
+func getStackatoRedisAddr() (string, error) {
+	uridata, err := ioutil.ReadFile("/s/etc/kato/redis_uri")
+	if err != nil {
+		return "", err
+	}
+	u, err := url.Parse(string(uridata))
+	if err != nil {
+		return "", err
+	}
+	return u.Host, nil
 }
