@@ -24,7 +24,7 @@ var clusterConfig *Config
 
 func GetClusterConfig() *ClusterConfig {
 	once.Do(createClusterConfig)
-	return clusterConfig.Config.(*ClusterConfig)
+	return clusterConfig.GetConfig().(*ClusterConfig)
 }
 
 var once sync.Once
