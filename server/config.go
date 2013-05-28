@@ -76,9 +76,13 @@ func getStackatoRedisAddr() (string, string, int64, error) {
 	var database int64
 	fmt.Sscanf(u.Path, "/%d", &database)
 
-	pass, haspass := u.User.Password()
-	if !haspass {
-		pass = ""
+	var pass string
+	if u.User != nil {
+		var haspass bool
+		pass, haspass = u.User.Password()
+		if !haspass {
+			pass = ""
+		}
 	}
 
 	return u.Host, pass, database, nil
