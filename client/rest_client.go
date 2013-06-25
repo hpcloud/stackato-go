@@ -61,9 +61,9 @@ func (c *RestClient) CreateApp(name string) (int, error) {
 		}
 	}
 
-	// The CC requires that a POST on /apps passes, at minimum, these
+	// The CC requires that a POST on /apps sends, at minimum, these
 	// fields. The values for framework/runtime doesn't matter for our
-	// purposes (they will get overwritten by a subsequent app push).
+	// purpose (they will get overwritten by a subsequent app push).
 	createArgs := map[string]interface{}{
 		"name": name,
 		"staging": map[string]string{
@@ -94,7 +94,11 @@ func (c *RestClient) MakeRequest(method string, path string, params interface{},
 	if c.Group != "" {
 		req.Header.Set("X-Stackato-Group", c.Group)
 	}
-	return c.client.DoRequest(req, response)
+	err = c.client.DoRequest(req, response)
+	if err != nil {
+		return fmt.Errorf("CC API %v %v failed: %v", method, path, err)
+	}
+	return nil
 }
 
 // emulate `curl -k ...`
