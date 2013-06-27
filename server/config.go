@@ -22,7 +22,7 @@ func NewConfig(group string, s interface{}) (*Config, error) {
 		return nil, err
 	}
 
-	redis, err := NewRedisClient(addr, pass, db)
+	redis, err := NewRedisClientRetry(addr, pass, db, 3)
 	if err != nil {
 		return nil, err
 	}
