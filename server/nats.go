@@ -9,8 +9,6 @@ import (
 // NewNatsClient connects to the NATS server of the Stackato cluster
 func NewNatsClient(retries int) *nats.EncodedConn {
 	natsUri := GetClusterConfig().GetNatsUri()
-	// TODO: hardcoding nats uri until we read the actual config.
-	natsUri = "nats://127.0.0.1:4222/"
 	log.Infof("Connecting to NATS %s\n", natsUri)
 
 	var nc *nats.Conn
