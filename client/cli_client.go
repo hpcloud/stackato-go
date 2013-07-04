@@ -25,7 +25,7 @@ func NewCliClient(targetUrl, token, group string) (*CliClient, error) {
 
 // PushAppNoCreate emulates `s push --no-create ...` and sends the
 // output in outputCh channel.
-func (c *CliClient) PushAppNoCreate(name string, dir string, autoStart bool, outputCh chan string) error {
+func (c *CliClient) PushAppNoCreate(name string, dir string, autoStart bool, outputCh chan string) (bool, error) {
 	options := []string{
 		name,
 		"--no-tail", "--no-prompt",
@@ -46,7 +46,12 @@ func (c *CliClient) PushAppNoCreate(name string, dir string, autoStart bool, out
 	ret, err := run.Run(exec.Command("stackato", pushOptions...), outputCh)
 	if err != nil {
 		log.Error("cannot read line: ", err)
-		return err
+		return false, err
 	}
-	return ret
+	if r, ok := ret.(*exec.ExitError); ok {
+		log.Errorf("Client exited abruptly: %v", r)
+		return false, nil
+	}else{
+		return true, ret
+	}
 }

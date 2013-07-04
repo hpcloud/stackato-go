@@ -1,37 +1,43 @@
 package server
 
 import (
-	"github.com/ha/doozer"
-	"github.com/ActiveState/doozerconfig"
+	"fmt"
 	"github.com/ActiveState/log"
-	"strings"
+	"sync"
 )
 
-type clusterConfig struct {
-	Endpoint string `doozer:"/cluster/config/endpoint"`
-	CoreIP   string `doozer:"/cluster/config/mbusip"`
-	NatsUri  string `doozer:"/proc/cloud_controller/config/mbus"`
+type ClusterConfig struct {
+	MbusIp   string `json:"mbusip"`
+	Endpoint string `json:"endpoint"`
 }
 
-var Config *clusterConfig
-
-// IsMicro returns true if the cluster is configured as a micro cloud.
-func (c *clusterConfig) IsMicro() bool {
-	return strings.Contains(c.NatsUri, "/127.0.0.1:")
+func (c *ClusterConfig) GetNatsUri() string {
+	// HACK: Ideally we should be reading NatsUri from
+	// cloud_controller config (mbus). we take a shortcut here in
+	// order to not have to create a separate ConfDis instance for
+	// cloud_controller config (and having to watch it). This will
+	// have to change if we switch to clustered version of NATS.
+	return fmt.Sprintf("nats://%s:4222/", c.MbusIp)
 }
 
-func Init(conn *doozer.Conn, rev int64) {
-	Config = new(clusterConfig)
-	cfg := doozerconfig.New(conn, rev, Config, "")
-	err := cfg.Load()
+var clusterConfig *Config
+
+func GetClusterConfig() *ClusterConfig {
+	once.Do(createClusterConfig)
+	return clusterConfig.GetConfig().(*ClusterConfig)
+}
+
+var once sync.Once
+
+func createClusterConfig() {
+	var err error
+	clusterConfig, err = NewConfig("cluster", ClusterConfig{})
 	if err != nil {
 		log.Fatal(err)
 	}
+}
 
-	go cfg.Monitor("/cluster/config/*", func(change *doozerconfig.Change, err error) {
-		if err != nil {
-			log.Errorf("Unable to process cluster config change in doozer: %s", err)
-			return
-		}
-	})
+// IsMicro returns true if the cluster is configured as a micro cloud.
+func (c *ClusterConfig) IsMicro() bool {
+	return c.MbusIp == "127.0.0.1"
 }
