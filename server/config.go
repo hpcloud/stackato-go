@@ -4,6 +4,7 @@ import (
 	"confdis/go/confdis"
 	"fmt"
 	"github.com/ActiveState/log"
+	"github.com/coreos/go-etcd/etcd"
 	"io/ioutil"
 	"net/url"
 )
@@ -17,17 +18,13 @@ type Config struct {
 }
 
 func NewConfig(group string, s interface{}) (*Config, error) {
+	/* TODO: adapt for etcd
 	addr, pass, db, err := getStackatoRedisAddr()
 	if err != nil {
 		return nil, err
-	}
+	}*/
 
-	redis, err := NewRedisClientRetry(addr, pass, db, 3)
-	if err != nil {
-		return nil, err
-	}
-
-	c, err := confdis.New(redis, group, s)
+	c, err := confdis.New(etcd.NewClient(), group, s)
 	if err != nil {
 		return nil, err
 	}
