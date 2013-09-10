@@ -10,39 +10,36 @@ import (
 type RestClient struct {
 	TargetURL string
 	Token     string
-	Group     string
+	Space     string
 	client    *client.Client
 }
 
-func NewRestClient(targetUrl, token, group string) *RestClient {
-	return &RestClient{targetUrl, token, group, getInsecureHttpRestClient()}
+func NewRestClient(targetUrl, token, space string) *RestClient {
+	if space == "" {
+		panic("empty Space")
+	}
+	if token == "" {
+		panic("empty Token")
+	}
+	return &RestClient{targetUrl, token, space, getInsecureHttpRestClient()}
 }
 
 type App struct {
-	Name             string
-	URIs             []string
-	Instances        int
-	RunningInstances *int
-	State            string
-	Version          string
-	Staging          struct {
-		Model string
-		Stack string
-	}
-	Resources struct {
-		Memory int
-		Disk   int
-		FDs    int
-		Sudo   bool
-	}
-	Meta struct {
-		Version int
-		Created int // timestamp
-	}
+	GUID              string
+	Name              string
+	URLs              []string
+	Instances         int
+	RunningInstances  *int
+	Version           string
+	Buildpack         string
+	DetectedBuildpack string
+	Memory            int
+	DiskQuota         int
 }
 
 func (c *RestClient) ListApps() (apps []App, err error) {
-	err = c.MakeRequest("GET", "/apps", nil, &apps)
+	path := fmt.Sprintf("/v2/spaces/%s/summary", c.Space)
+	err = c.MakeRequest("GET", path, nil, &apps)
 	return
 }
 
@@ -91,9 +88,6 @@ func (c *RestClient) MakeRequest(method string, path string, params interface{},
 		return err
 	}
 	req.Header.Set("Authorization", c.Token)
-	if c.Group != "" {
-		req.Header.Set("X-Stackato-Group", c.Group)
-	}
 	err = c.client.DoRequest(req, response)
 	if err != nil {
 		return fmt.Errorf("CC API %v %v failed: %v", method, path, err)

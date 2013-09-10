@@ -51,7 +51,7 @@ func (c *CliClient) PushAppNoCreate(name string, dir string, autoStart bool, out
 	if r, ok := ret.(*exec.ExitError); ok {
 		log.Errorf("Client exited abruptly: %v", r)
 		return false, nil
-	}else{
+	} else {
 		return true, ret
 	}
 }
