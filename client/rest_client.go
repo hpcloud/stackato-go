@@ -39,22 +39,28 @@ type App struct {
 
 func (c *RestClient) ListApps() (apps []App, err error) {
 	path := fmt.Sprintf("/v2/spaces/%s/summary", c.Space)
-	err = c.MakeRequest("GET", path, nil, &apps)
+	var response struct {
+		GUID string
+		Name string
+		Apps []App
+	}
+	response.Apps = apps
+	err = c.MakeRequest("GET", path, nil, &response)
 	return
 }
 
 // CreateApp only creates the application. It is an equivalent of `s
 // create-app --json`.
-func (c *RestClient) CreateApp(name string) (int, error) {
+func (c *RestClient) CreateApp(name string) (string, error) {
 	// Ensure that app name is unique for this user. We do this as
 	// unfortunately the server doesn't enforce it.
 	apps, err := c.ListApps()
 	if err != nil {
-		return -1, err
+		return "", err
 	}
 	for _, app := range apps {
 		if app.Name == name {
-			return -1, fmt.Errorf("App by that name (%s) already exists", name)
+			return "", fmt.Errorf("App by that name (%s) already exists", name)
 		}
 	}
 
@@ -62,24 +68,25 @@ func (c *RestClient) CreateApp(name string) (int, error) {
 	// fields. The values for framework/runtime doesn't matter for our
 	// purpose (they will get overwritten by a subsequent app push).
 	createArgs := map[string]interface{}{
-		"name": name,
-		"staging": map[string]string{
-			"framework": "buildpack",
-			"runtime":   "python27",
-		},
+		"name":       name,
+		"space_guid": c.Space,
 	}
 
-	var resp struct{ App_ID int }
-	err = c.MakeRequest("POST", "/apps", createArgs, &resp)
+	var resp struct {
+		Metadata struct {
+			GUID string
+		}
+	}
+	err = c.MakeRequest("POST", "/v2/apps", createArgs, &resp)
 	if err != nil {
-		return -1, err
+		return "", err
 	}
 
-	if resp.App_ID < 1 {
-		return -1, fmt.Errorf("Invalid or missing AppID from CC: %d", resp.App_ID)
+	if resp.Metadata.GUID == "" {
+		return "", fmt.Errorf("Missing App GUID from CC")
 	}
 
-	return resp.App_ID, nil
+	return resp.Metadata.GUID, nil
 }
 
 func (c *RestClient) MakeRequest(method string, path string, params interface{}, response interface{}) error {
