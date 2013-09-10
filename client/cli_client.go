@@ -12,14 +12,17 @@ import (
 type CliClient struct {
 	TargetURL string
 	Token     string
-	Group     string
+	Space     string
 }
 
-func NewCliClient(targetUrl, token, group string) (*CliClient, error) {
+func NewCliClient(targetUrl, token, space string) (*CliClient, error) {
 	if token == "" {
-		return nil, fmt.Errorf("token string must not be empty")
+		return nil, fmt.Errorf("Token must not be empty")
 	}
-	c := &CliClient{targetUrl, token, group}
+	if space == "" {
+		return nil, fmt.Errorf("Space must not be empty")
+	}
+	c := &CliClient{targetUrl, token, space}
 	return c, nil
 }
 
@@ -31,14 +34,11 @@ func (c *CliClient) PushAppNoCreate(name string, dir string, autoStart bool, out
 		"--no-tail", "--no-prompt",
 		"--target", c.TargetURL,
 		"--token", c.Token,
+		"--space", c.Space,
 		"--path", dir}
 
 	if !autoStart {
 		options = append(options, "--no-start")
-	}
-
-	if c.Group != "" {
-		options = append(options, "--group", c.Group)
 	}
 
 	pushOptions := append([]string{"push", "--no-create"}, options...)
