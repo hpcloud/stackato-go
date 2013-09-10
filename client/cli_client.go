@@ -26,10 +26,11 @@ func NewCliClient(targetUrl, token, space string) (*CliClient, error) {
 	return c, nil
 }
 
-// PushAppNoCreate emulates `s push --no-create ...` and sends the
+// PushAppNoCreate emulates `s push ...` and sends the
 // output in outputCh channel.
 func (c *CliClient) PushAppNoCreate(name string, dir string, autoStart bool, outputCh chan string) (bool, error) {
 	options := []string{
+		"push",
 		name,
 		"--no-tail", "--no-prompt",
 		"--target", c.TargetURL,
@@ -41,9 +42,7 @@ func (c *CliClient) PushAppNoCreate(name string, dir string, autoStart bool, out
 		options = append(options, "--no-start")
 	}
 
-	pushOptions := append([]string{"push", "--no-create"}, options...)
-
-	ret, err := run.Run(exec.Command("stackato", pushOptions...), outputCh)
+	ret, err := run.Run(exec.Command("stackato", options...), outputCh)
 	if err != nil {
 		log.Error("cannot read line: ", err)
 		return false, err
