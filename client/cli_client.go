@@ -43,7 +43,13 @@ func (c *CliClient) PushAppNoCreate(name string, dir string, autoStart bool, out
 		options = append(options, "--no-start")
 	}
 
-	ret, err := run.Run(exec.Command("stackato", options...), outputCh)
+	cmd := exec.Command("stackato", options...)
+	cmd.Dir = dir
+	// Avoid messing up ~stackato/.stackato/client
+	// cmd.Env = []string{"HOME=/tmp"}
+
+	// log.Infof("Running command: %+v", cmd)
+	ret, err := run.Run(cmd, outputCh)
 	if err != nil {
 		log.Error("cannot read line: ", err)
 		return false, err
