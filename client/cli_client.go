@@ -31,7 +31,7 @@ func NewCliClient(targetUrl, token, space string) (*CliClient, error) {
 func (c *CliClient) PushAppNoCreate(name string, dir string, autoStart bool, outputCh chan string) (bool, error) {
 	options := []string{
 		"push",
-		name,
+		"--name", name,
 		"--no-tail",
 		"--no-prompt",
 		"--target", c.TargetURL,
