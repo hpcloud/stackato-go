@@ -32,10 +32,11 @@ func (c *CliClient) PushAppNoCreate(name string, dir string, autoStart bool, out
 	options := []string{
 		"push",
 		name,
-		"--no-tail", "--no-prompt",
+		"--no-tail",
+		"--no-prompt",
 		"--target", c.TargetURL,
 		"--token", c.Token,
-		"--space", c.Space,
+		"--space-guid", c.Space,
 		"--path", dir}
 
 	if !autoStart {
