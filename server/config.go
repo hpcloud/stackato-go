@@ -6,6 +6,7 @@ import (
 	"github.com/ActiveState/log"
 	"io/ioutil"
 	"net/url"
+	"os"
 )
 
 // Config refers to Stackato configuration under a specific
@@ -61,13 +62,14 @@ func (g *Config) monitor() {
 }
 
 // getStackatoRedisAddr returns the redis connection address, password
-// and database of the Stackato redis instance storing configuration.
+// and database of the Stackato redis instance managing configuration.
 func getStackatoRedisAddr() (string, string, int64, error) {
-	uridata, err := ioutil.ReadFile("/s/etc/kato/redis_uri")
+	uri, err := getStackatoRedisUri()
 	if err != nil {
 		return "", "", -1, err
 	}
-	u, err := url.Parse(string(uridata))
+
+	u, err := url.Parse(uri)
 	if err != nil {
 		return "", "", -1, err
 	}
@@ -86,4 +88,21 @@ func getStackatoRedisAddr() (string, string, int64, error) {
 	}
 
 	return u.Host, pass, database, nil
+}
+
+func getStackatoRedisUri() (string, error) {
+	// If running under docker, use env var. Else, rely on kato configuration.
+	if os.Getenv("STACKATO_DOCKER") == "" {
+		uridata, err := ioutil.ReadFile("/s/etc/kato/redis_uri")
+		if err != nil {
+			return "", err
+		}
+		return string(uridata), nil
+	} else {
+		uri := os.Getenv("CONFIG_REDIS_URI")
+		if uri == "" {
+			return "", fmt.Errorf("CONFIG_REDIS_URI env is not set")
+		}
+		return uri, nil
+	}
 }
