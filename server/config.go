@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"net/url"
 	"os"
+	"strings"
 )
 
 // Config refers to Stackato configuration under a specific
@@ -96,6 +97,14 @@ func getStackatoRedisUri() (string, error) {
 		uri := os.Getenv("CONFIG_REDIS_URI")
 		if uri == "" {
 			return "", fmt.Errorf("CONFIG_REDIS_URI env is not set")
+		}
+		// Replace loopback with DOCKER_HOST
+		if strings.Contains(uri, "127.0.0.1") {
+			dockerHostIp, err := GetDockerHostIp()
+			if err != nil {
+				return "", err
+			}
+			uri = strings.Replace(uri, "127.0.0.1", dockerHostIp, 1)
 		}
 		return uri, nil
 	} else {
