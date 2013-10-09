@@ -1,7 +1,6 @@
 package server
 
 import (
-	"fmt"
 	"github.com/ActiveState/log"
 	"sync"
 )
@@ -9,15 +8,6 @@ import (
 type ClusterConfig struct {
 	MbusIp   string `json:"mbusip"`
 	Endpoint string `json:"endpoint"`
-}
-
-func (c *ClusterConfig) GetNatsUri() string {
-	// HACK: Ideally we should be reading NatsUri from
-	// cloud_controller config (mbus). we take a shortcut here in
-	// order to not have to create a separate ConfDis instance for
-	// cloud_controller config (and having to watch it). This will
-	// have to change if we switch to clustered version of NATS.
-	return fmt.Sprintf("nats://%s:4222/", c.MbusIp)
 }
 
 var clusterConfig *Config

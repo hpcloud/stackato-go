@@ -92,17 +92,17 @@ func getStackatoRedisAddr() (string, string, int64, error) {
 
 func getStackatoRedisUri() (string, error) {
 	// If running under docker, use env var. Else, rely on kato configuration.
-	if os.Getenv("STACKATO_DOCKER") == "" {
-		uridata, err := ioutil.ReadFile("/s/etc/kato/redis_uri")
-		if err != nil {
-			return "", err
-		}
-		return string(uridata), nil
-	} else {
+	if InsideDocker() {
 		uri := os.Getenv("CONFIG_REDIS_URI")
 		if uri == "" {
 			return "", fmt.Errorf("CONFIG_REDIS_URI env is not set")
 		}
 		return uri, nil
+	} else {
+		uridata, err := ioutil.ReadFile("/s/etc/kato/redis_uri")
+		if err != nil {
+			return "", err
+		}
+		return string(uridata), nil
 	}
 }

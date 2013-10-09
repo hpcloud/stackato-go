@@ -1,6 +1,7 @@
 package server
 
 import (
+	"fmt"
 	"github.com/ActiveState/log"
 	"github.com/apcera/nats"
 	"time"
@@ -8,11 +9,13 @@ import (
 
 // NewNatsClient connects to the NATS server of the Stackato cluster
 func NewNatsClient(retries int) *nats.EncodedConn {
-	natsUri := GetClusterConfig().GetNatsUri()
-	log.Infof("Connecting to NATS %s\n", natsUri)
+	natsUri, err := getNatsUri()
+	if err != nil {
+		log.Fatalf("Unable to get Nats URI: %v", err)
+	}
+	log.Infof("Connecting to NATS server %s\n", natsUri)
 
 	var nc *nats.Conn
-	var err error
 
 	for attempt := 0; attempt < retries; attempt++ {
 		nc, err = nats.Connect(natsUri)
@@ -26,7 +29,7 @@ func NewNatsClient(retries int) *nats.EncodedConn {
 		}
 	}
 
-	log.Infof("Connected to NATS %s\n", natsUri)
+	log.Infof("Connected to NATS server %s\n", natsUri)
 	client, err := nats.NewEncodedConn(nc, "json")
 	if err != nil {
 		log.Fatal(err)
@@ -44,4 +47,26 @@ func NewNatsClient(retries int) *nats.EncodedConn {
 	}()
 
 	return client
+}
+
+func getNatsUri() (string, error) {
+	var ipaddr string
+	// Use non-lookback address on a micro cloud to connect from docker
+	// container to host.
+	if InsideDocker() && GetClusterConfig().IsMicro() {
+		var err error
+		ipaddr, err = GetDockerHostIp()
+		if ipaddr == "" {
+			return "", err
+		}
+	} else {
+		ipaddr = GetClusterConfig().MbusIp
+	}
+
+	// HACK: Ideally we should be reading NatsUri from
+	// cloud_controller config (mbus). we take a shortcut here in
+	// order to not have to create a separate ConfDis instance for
+	// cloud_controller config (and having to watch it). This will
+	// have to change if we switch to clustered version of NATS.
+	return fmt.Sprintf("nats://%s:4222/", ipaddr), nil
 }
