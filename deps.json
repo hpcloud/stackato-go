@@ -3,7 +3,7 @@
         "repo": "http://git-mirrors.activestate.com/confdis.git",
         "version": "master",
         "type": "git-clone",
-        "alias": "confdis/go/confdis"
+        "alias": "confdis"
     },
     "github.com/ActiveState/httpapi": {
         "repo": "github.com/ActiveState/httpapi",
