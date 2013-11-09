@@ -11,13 +11,12 @@ type ClusterConfig struct {
 }
 
 var clusterConfig *Config
+var onceClusterConfig sync.Once
 
 func GetClusterConfig() *ClusterConfig {
-	once.Do(createClusterConfig)
+	onceClusterConfig.Do(createClusterConfig)
 	return clusterConfig.GetConfig().(*ClusterConfig)
 }
-
-var once sync.Once
 
 func createClusterConfig() {
 	var err error
