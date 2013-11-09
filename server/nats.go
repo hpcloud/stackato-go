@@ -9,16 +9,19 @@ import (
 
 // NewNatsClient connects to the NATS server of the Stackato cluster
 func NewNatsClient(retries int) *nats.EncodedConn {
-	natsUri, err := getNatsUri()
+	servers, err := getNatsServers()
 	if err != nil {
 		log.Fatalf("Unable to get Nats URI: %v", err)
 	}
-	log.Infof("Connecting to NATS server %s\n", natsUri)
+	log.Infof("Connecting to NATS servers %s\n", servers)
 
 	var nc *nats.Conn
+	opts := nats.DefaultOptions
+	opts.Servers = servers
+	// opts.Secure = true
 
 	for attempt := 0; attempt < retries; attempt++ {
-		nc, err = nats.Connect(natsUri)
+		nc, err = opts.Connect()
 		if err != nil {
 			if (attempt + 1) == retries {
 				log.Fatal(err)
@@ -29,7 +32,7 @@ func NewNatsClient(retries int) *nats.EncodedConn {
 		}
 	}
 
-	log.Infof("Connected to NATS server %s\n", natsUri)
+	log.Infof("Connected to NATS servers %s\n", servers)
 	client, err := nats.NewEncodedConn(nc, "json")
 	if err != nil {
 		log.Fatal(err)
@@ -49,7 +52,7 @@ func NewNatsClient(retries int) *nats.EncodedConn {
 	return client
 }
 
-func getNatsUri() (string, error) {
+func getNatsServers() ([]string, error) {
 	var ipaddr string
 	// Use non-lookback address on a micro cloud to connect from docker
 	// container to host.
@@ -57,7 +60,7 @@ func getNatsUri() (string, error) {
 		var err error
 		ipaddr, err = GetDockerHostIp()
 		if ipaddr == "" {
-			return "", err
+			return nil, err
 		}
 	} else {
 		ipaddr = GetClusterConfig().MbusIp
@@ -68,5 +71,7 @@ func getNatsUri() (string, error) {
 	// order to not have to create a separate ConfDis instance for
 	// cloud_controller config (and having to watch it). This will
 	// have to change if we switch to clustered version of NATS.
-	return fmt.Sprintf("nats://%s:4222/", ipaddr), nil
+	uri := fmt.Sprintf("nats://%s:4222/", ipaddr)
+
+	return []string{uri}, nil
 }
