@@ -53,17 +53,18 @@ func NewNatsClient(retries int) *nats.EncodedConn {
 }
 
 func getNatsServers() ([]string, error) {
-	var ipaddr string
+	ipaddrs := []string{}
+
 	// Use non-lookback address on a micro cloud to connect from docker
 	// container to host.
 	if InsideDocker() && GetClusterConfig().IsMicro() {
-		var err error
-		ipaddr, err = GetDockerHostIp()
+		ipaddr, err := GetDockerHostIp()
 		if ipaddr == "" {
 			return nil, err
 		}
+		ipaddrs = append(ipaddrs, ipaddr)
 	} else {
-		ipaddr = GetClusterConfig().MbusIp
+		ipaddrs = getNodesWithNatsRunning()
 	}
 
 	// HACK: Ideally we should be reading NatsUri from
@@ -71,7 +72,23 @@ func getNatsServers() ([]string, error) {
 	// order to not have to create a separate ConfDis instance for
 	// cloud_controller config (and having to watch it). This will
 	// have to change if we switch to clustered version of NATS.
-	uri := fmt.Sprintf("nats://%s:4222/", ipaddr)
+	uris := []string{}
+	for _, ipaddr := range ipaddrs {
+		uris = append(uris, fmt.Sprintf("nats://%s:4222/", ipaddr))
+	}
 
-	return []string{uri}, nil
+	return uris, nil
+}
+
+func getNodesWithNatsRunning() []string {
+	nodes := []string{}
+	for ipaddr, info := range *GetNodeConfig() {
+		for role, _ := range info.Roles {
+			if role == "nats" || role == "primary" {
+				nodes = append(nodes, ipaddr)
+				break
+			}
+		}
+	}
+	return nodes
 }
