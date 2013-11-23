@@ -1,6 +1,6 @@
 {
     "confdis": {
-        "repo": "http://git-mirrors.activestate.com/confdis.git",
+        "repo": "http://git-mirrors.activestate.com/github.com/ActiveState/confdis.git",
         "version": "master",
         "type": "git-clone",
         "alias": "confdis"
@@ -21,7 +21,7 @@
         "type": "git"
     },
     "github.com/apcera/nats": {
-        "repo": "http://git-mirrors.activestate.com/nats.git",
+        "repo": "http://git-mirrors.activestate.com/github.com/apcera/nats.git",
         "version": "d5055940",
         "type": "git-clone",
         "alias": "github.com/apcera/nats"
