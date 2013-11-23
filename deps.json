@@ -22,7 +22,7 @@
     },
     "github.com/apcera/nats": {
         "repo": "http://git-mirrors.activestate.com/github.com/apcera/nats.git",
-        "version": "d5055940",
+        "version": "de9cb44dc1e",
         "type": "git-clone",
         "alias": "github.com/apcera/nats"
     }
