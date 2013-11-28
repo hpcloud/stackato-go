@@ -1,23 +1,23 @@
 {
     "confdis": {
         "repo": "http://git-mirrors.activestate.com/github.com/ActiveState/confdis.git",
-        "version": "master",
+        "version": "232224377",
         "type": "git-clone",
         "alias": "confdis"
     },
     "github.com/ActiveState/httpapi": {
         "repo": "github.com/ActiveState/httpapi",
-        "version": "master",
+        "version": "6a46f16c055",
         "type": "git"
     },
     "github.com/ActiveState/log": {
         "repo": "github.com/ActiveState/log",
-        "version": "master",
+        "version": "496a9e344fb",
         "type": "git"
     },
     "github.com/ActiveState/run": {
         "repo": "github.com/ActiveState/run",
-        "version": "master",
+        "version": "f5cbe2f43",
         "type": "git"
     },
     "github.com/apcera/nats": {
