@@ -9,6 +9,7 @@ type NodeInfo struct {
 	Roles map[string]string `json:"roles"` // role name -> role status
 }
 
+// NodeConfig corresponds to Kato's /node config, which is a hash of ipaddr => NodeInfo
 type NodeConfig map[string]NodeInfo
 
 var nodeConfig *Config
