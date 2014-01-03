@@ -30,3 +30,11 @@ func createClusterConfig() {
 func (c *ClusterConfig) IsMicro() bool {
 	return c.MbusIp == "127.0.0.1"
 }
+
+func (c ClusterConfig) CurrentNodeId() (string, error) {
+	if c.IsMicro() {
+		return "127.0.0.1", nil
+	} else {
+		return LocalIP()
+	}
+}
