@@ -24,6 +24,9 @@ func MarkRunning(name string) {
 	pid := os.Getpid()
 	err = runningConfig.AtomicSave(func(i interface{}) error {
 		config := i.(*RunningConfig)
+		if *config == nil {
+			*config = make(RunningConfig)
+		}
 		if _, ok := (*config)[nodeid]; !ok {
 			(*config)[nodeid] = make(map[string]int)
 		}
