@@ -1,7 +1,7 @@
 {
     "confdis": {
         "repo": "http://git-mirrors.activestate.com/github.com/ActiveState/confdis.git",
-        "version": "232224377",
+        "version": "master",
         "type": "git-clone",
         "alias": "confdis"
     },
