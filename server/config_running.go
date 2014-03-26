@@ -33,6 +33,7 @@ func MarkRunning(name string) {
 		(*config)[nodeid][name] = pid
 		return nil
 	})
+	log.Infof("PID is %v", pid)
 	if err != nil {
 		log.Fatal("Error setting running status: %v", err)
 	}

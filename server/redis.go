@@ -44,5 +44,8 @@ func NewRedisClientRetry(addr, password string, database, retries int64) (*redis
 			return client, nil
 		}
 	}
+	if err == nil {
+		log.Fatal("impossible")
+	}
 	return client, err
 }
