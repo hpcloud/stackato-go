@@ -12,7 +12,7 @@ import (
 func NewRedisClient(addr, password string, database int64) (*redis.Client, error) {
 	// Bug #97459 -- is the redis client library faking connection for
 	// the down server?
-	conn, err := net.Dial("tcp", InjectDockerHostIp(addr))
+	conn, err := net.Dial("tcp", convertLoopbackIP(addr))
 	if err != nil {
 		return nil, err
 	}

@@ -112,7 +112,7 @@ func getStackatoRedisUri() (string, error) {
 		if err != nil {
 			return "", err
 		}
-		uri = InjectDockerHostIp(string(uridata))
+		uri = convertLoopbackIP(string(uridata))
 	}
 	return uri, nil
 }

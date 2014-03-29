@@ -74,7 +74,7 @@ func getNatsServers() ([]string, error) {
 	// have to change if we switch to clustered version of NATS.
 	uris := []string{}
 	for _, ipaddr := range ipaddrs {
-		ipaddr = InjectDockerHostIp(fmt.Sprintf("nats://%s:4222/", ipaddr))
+		ipaddr = convertLoopbackIP(fmt.Sprintf("nats://%s:4222/", ipaddr))
 		uris = append(uris, ipaddr)
 	}
 
