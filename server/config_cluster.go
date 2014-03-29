@@ -40,7 +40,7 @@ func (c ClusterConfig) CurrentNodeId() (string, error) {
 }
 
 // GetMbusIP returns a docker-friendly value for MbusIP
-func (c ClusterConfig) GetMbusIP() string {
+func (c *ClusterConfig) GetMbusIP() string {
 	if InsideDocker() {
 		if c.MbusIp == "127.0.0.1" {
 			dockerHost, err := GetDockerHostIp()
