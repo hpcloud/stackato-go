@@ -20,7 +20,7 @@ func GetDockerHostIp() (string, error) {
 	}
 }
 
-func convertLoopbackIP(addr string) string {
+func InjectDockerHostIp(addr string) string {
 	// Avoid going through docker's userland proxy by not using 127.0.0.1
 	if strings.Contains(addr, "127.0.0.1") {
 		addr = strings.Replace(addr, "127.0.0.1", LocalIPMust(), 1)
