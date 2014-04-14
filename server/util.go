@@ -14,7 +14,15 @@ func LocalIPMust() string {
 	return ip
 }
 
-// LocalIP returns the ip address of the local node
+func NodeIPMust() string {
+	ip, err := NodeIP()
+	if err != nil {
+		log.Fatalf("Unable to determine node IP: %v", err)
+	}
+	return ip
+}
+
+// LocalIP returns the externally visible address of localhost
 func LocalIP() (string, error) {
 	ip, err := localIP()
 	if err != nil {
@@ -46,4 +54,14 @@ func localIP() (net.IP, error) {
 		}
 	}
 	return nil, fmt.Errorf("no interfaces")
+}
+
+// NodeIP returns the externally visible address of the docker host. If the
+// current process is not running in a docker container, returns LocalIP()
+func NodeIP() (string, error) {
+	if InsideDocker() {
+		return GetDockerHostIp()
+	} else {
+		return LocalIP()
+	}
 }
