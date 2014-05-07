@@ -15,9 +15,6 @@ type RestClient struct {
 }
 
 func NewRestClient(targetUrl, token, space string) *RestClient {
-	if space == "" {
-		panic("empty Space")
-	}
 	if token == "" {
 		panic("empty Token")
 	}
@@ -37,7 +34,19 @@ type App struct {
 	DiskQuota         int
 }
 
+func (c *RestClient) GetLogs(appGUID string, num int) ([]AppLogLine, error) {
+	path := fmt.Sprintf("/v2/apps/%s/stackato_logs?num=%d&monolith=1", appGUID, num)
+	var response struct {
+		Lines []AppLogLine `json:"lines"`
+	}
+	err := c.MakeRequest("GET", path, nil, &response)
+	return response.Lines, err
+}
+
 func (c *RestClient) ListApps() (apps []App, err error) {
+	if c.Space == "" {
+		panic("empty Space")
+	}
 	path := fmt.Sprintf("/v2/spaces/%s/summary", c.Space)
 	var response struct {
 		GUID string
