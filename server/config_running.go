@@ -16,6 +16,10 @@ type RunningConfig map[string]runningInfo
 // MarkRunning marks the current process, identified by name `name`, as
 // "running" for kato-status.
 func MarkRunning(name string) {
+	// XXX: it is not safe to write to /running yet.
+	// https://bugs.activestate.com/show_bug.cgi?id=102768#c10
+	return
+
 	onceRunningConfig.Do(createRunningConfig)
 	nodeid, err := GetClusterConfig().CurrentNodeId()
 	if err != nil {
