@@ -43,6 +43,16 @@ func (c *RestClient) GetLogs(appGUID string, num int) ([]AppLogLine, error) {
 	return response.Lines, err
 }
 
+func (c *RestClient) GetLogsRaw(appGUID string, num int) ([]string, error) {
+	path := fmt.Sprintf(
+		"/v2/apps/%s/stackato_logs?num=%d&as_is=1&monolith=1", appGUID, num)
+	var response struct {
+		Lines []string `json:"lines"`
+	}
+	err := c.MakeRequest("GET", path, nil, &response)
+	return response.Lines, err
+}
+
 func (c *RestClient) ListApps() (apps []App, err error) {
 	if c.Space == "" {
 		panic("empty Space")
