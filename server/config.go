@@ -24,7 +24,7 @@ func NewConfig(group string, s interface{}) (*Config, error) {
 		return nil, err
 	}
 
-	redis, err := NewRedisClientRetry(addr, pass, db, 3)
+	redis, err := NewRedisClientRetry(addr, pass, db, -1)
 	if err != nil {
 		return nil, fmt.Errorf(
 			"Failed to connect to config_redis after 3 retries -- %v", err)
