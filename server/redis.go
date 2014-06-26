@@ -33,9 +33,15 @@ func NewRedisClientRetry(addr, password string, database, retries int64) (*redis
 	var client *redis.Client
 	var err error
 
+	if retries < 0 {
+		// Default retry: up to10 minutes
+		retries = 600
+	}
+
 	for attempt := int64(0); attempt < retries; attempt++ {
 		if attempt > 0 {
-			log.Warnf("Retrying failed connection to redis (%v) ...", err)
+			log.Warnf("Retrying (#%d) failed connection to redis (%v) ...",
+				attempt+1, err)
 			time.Sleep(time.Second)
 		}
 		client, err = NewRedisClient(addr, password, database)
