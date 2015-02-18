@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestNewRestClient(t *testing.T) {
+func Test_Successful_NewRestClient(t *testing.T) {
 	url := "http://127.0.0.1/test"
 	space := "space"
 	token := "token"
@@ -15,8 +15,14 @@ func TestNewRestClient(t *testing.T) {
 	assert.Equal(t, client.Token, token)
 	assert.Equal(t, client.Space, space)
 	assert.Equal(t, client.TargetURL, url)
+}
+
+func Test_NewRestClient_WithBadToken(t *testing.T) {
+	url := "http://127.0.0.1/test"
+	space := "space"
+	token := ""
 
 	assert.Panics(t, func() {
-		client = NewRestClient(url, "", space)
+		_ = NewRestClient(url, token, space)
 	})
 }
