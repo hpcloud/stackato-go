@@ -70,7 +70,7 @@ func (c *RestClient) ListApps() (apps []App, err error) {
 
 // CreateApp only creates the application. It is an equivalent of `s
 // create-app --json`.
-func (c *RestClient) CreateApp(name string) (string, error) {
+func (c *RestClient) CreateApp(name string, memory int) (string, error) {
 	// Ensure that app name is unique for this user. We do this as
 	// unfortunately the server doesn't enforce it.
 	apps, err := c.ListApps()
@@ -89,6 +89,7 @@ func (c *RestClient) CreateApp(name string) (string, error) {
 	createArgs := map[string]interface{}{
 		"name":       name,
 		"space_guid": c.Space,
+		"memory":     memory,
 	}
 
 	var resp struct {
