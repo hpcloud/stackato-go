@@ -21,9 +21,9 @@
         "type": "git"
     },
     "github.com/apcera/nats": {
-        "repo": "github.com/nats-io/nats",
+        "repo": "http://git-mirrors.stackato.com/github.com/apcera/nats.git",
         "version": "d45d307327149a06fa969970693dfbbdde1c2b66",
-        "type": "git",
+        "type": "git-clone",
         "alias": "github.com/apcera/nats"
     }
 }
