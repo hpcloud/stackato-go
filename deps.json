@@ -1,6 +1,6 @@
 {
     "confdis": {
-        "repo": "http://git-mirrors.activestate.com/github.com/ActiveState/confdis.git",
+        "repo": "http://git-mirrors.stackato.com/github.com/ActiveState/confdis.git",
         "version": "280f9c36a",
         "type": "git-clone",
         "alias": "confdis"
@@ -21,9 +21,9 @@
         "type": "git"
     },
     "github.com/apcera/nats": {
-        "repo": "http://git-mirrors.activestate.com/github.com/apcera/nats.git",
+        "repo": "github.com/nats-io/nats",
         "version": "d45d307327149a06fa969970693dfbbdde1c2b66",
-        "type": "git-clone",
+        "type": "git",
         "alias": "github.com/apcera/nats"
     }
 }
