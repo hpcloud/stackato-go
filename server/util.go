@@ -2,8 +2,9 @@ package server
 
 import (
 	"fmt"
-	"github.com/ActiveState/log"
 	"net"
+
+	"github.com/hpcloud/log"
 )
 
 func LocalIPMust() string {

@@ -3,8 +3,9 @@ package client
 import (
 	"crypto/tls"
 	"fmt"
-	"github.com/ActiveState/httpapi/client"
 	"net/http"
+
+	"github.com/hpcloud/httpapi/client"
 )
 
 type RestClient struct {

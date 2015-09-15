@@ -1,10 +1,11 @@
 package server
 
 import (
-	"github.com/ActiveState/log"
-	"github.com/vmihailenco/redis"
 	"net"
 	"time"
+
+	"github.com/hpcloud/log"
+	"github.com/vmihailenco/redis"
 )
 
 // NewRedisClient connects to redis after ensuring that the server is

@@ -5,17 +5,17 @@
         "type": "git-clone",
         "alias": "confdis"
     },
-    "github.com/ActiveState/httpapi": {
+    "github.com/hpcloud/httpapi": {
         "repo": "github.com/hpcloud/httpapi",
         "version": "6a46f16c055",
         "type": "git"
     },
-    "github.com/ActiveState/log": {
+    "github.com/hpcloud/log": {
         "repo": "github.com/hpcloud/log",
         "version": "496a9e344fb",
         "type": "git"
     },
-    "github.com/ActiveState/run": {
+    "github.com/hpcloud/run": {
         "repo": "github.com/hpcloud/run",
         "version": "f5cbe2f43",
         "type": "git"
