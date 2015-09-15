@@ -1,14 +1,15 @@
 {
     "confdis": {
         "repo": "http://git-mirrors.stackato.com/github.com/hpcloud/confdis.git",
-        "version": "280f9c36a",
+        "version": "430f574e6e585ed3ea90236ccd34009e33e06a5b",
         "type": "git-clone",
         "alias": "confdis"
     },
     "github.com/ActiveState/httpapi": {
-        "repo": "github.com/hpcloud/httpapi",
+        "repo": "git@github.com:hpcloud/httpapi.git",
         "version": "6a46f16c055",
-        "type": "git"
+        "type": "git-clone",
+        "alias": "github.com/ActiveState/httpapi"
     },
     "github.com/ActiveState/log": {
         "repo": "github.com/hpcloud/log",
