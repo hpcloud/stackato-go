@@ -6,7 +6,7 @@
         "alias": "confdis"
     },
     "github.com/ActiveState/httpapi": {
-        "repo": "github.com/hpcloud/httpapi",
+        "repo": "git@github.com:hpcloud/httpapi.git",
         "version": "6a46f16c055",
         "type": "git-clone",
         "alias": "github.com/ActiveState/httpapi"
