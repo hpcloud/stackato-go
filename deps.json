@@ -8,7 +8,8 @@
     "github.com/ActiveState/httpapi": {
         "repo": "github.com/hpcloud/httpapi",
         "version": "6a46f16c055",
-        "type": "git"
+        "type": "git-clone",
+        "alias": "github.com/ActiveState/httpapi"
     },
     "github.com/ActiveState/log": {
         "repo": "github.com/hpcloud/log",
