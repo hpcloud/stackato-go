@@ -1,8 +1,9 @@
 package server
 
 import (
-	"github.com/ActiveState/log"
 	"sync"
+
+	"github.com/hpcloud/log"
 )
 
 type NodeInfo struct {

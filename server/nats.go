@@ -2,9 +2,10 @@ package server
 
 import (
 	"fmt"
-	"github.com/ActiveState/log"
-	"github.com/apcera/nats"
 	"time"
+
+	"github.com/apcera/nats"
+	"github.com/hpcloud/log"
 )
 
 // NewNatsClient connects to the NATS server of the Stackato cluster

@@ -1,9 +1,10 @@
 package server
 
 import (
-	"github.com/ActiveState/log"
 	"os"
 	"sync"
+
+	"github.com/hpcloud/log"
 )
 
 // runningInfo is a map of process name to process pid

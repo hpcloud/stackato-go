@@ -3,11 +3,12 @@ package server
 import (
 	"confdis/go/confdis"
 	"fmt"
-	"github.com/ActiveState/log"
 	"io/ioutil"
 	"net/url"
 	"os"
 	"strings"
+
+	"github.com/hpcloud/log"
 )
 
 // Config refers to Stackato configuration under a specific

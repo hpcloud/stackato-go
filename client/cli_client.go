@@ -4,9 +4,10 @@ package client
 
 import (
 	"fmt"
-	"github.com/ActiveState/log"
-	"github.com/ActiveState/run"
 	"os/exec"
+
+	"github.com/hpcloud/log"
+	"github.com/hpcloud/run"
 )
 
 type CliClient struct {
