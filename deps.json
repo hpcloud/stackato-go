@@ -1,9 +1,9 @@
 {
-    "confdis": {
-        "repo": "http://git-mirrors.stackato.com/github.com/hpcloud/confdis.git",
-        "version": "280f9c36a",
+    "github.com/hpcloud/confdis": {
+        "repo": "https://github.com/hpcloud/confdis.git",
+        "version": "430f574e6e585ed3ea90236ccd34009e33e06a5b",
         "type": "git-clone",
-        "alias": "confdis"
+        "alias": "github.com/hpcloud/confdis"
     },
     "github.com/hpcloud/httpapi": {
         "repo": "github.com/hpcloud/httpapi",
