@@ -1,13 +1,13 @@
 package server
 
 import (
-	"confdis/go/confdis"
 	"fmt"
 	"io/ioutil"
 	"net/url"
 	"os"
 	"strings"
 
+	"github.com/hpcloud/confdis/go/confdis"
 	"github.com/hpcloud/log"
 )
 
